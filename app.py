@@ -6,6 +6,7 @@ st.set_page_config(page_title="Global Country Statistics Explorer", layout="wide
 
 df = pd.read_csv("final_country_stats.csv")
 
+
 st.title("🌍 Global Country Statistics Explorer")
 st.write("Explore, compare, and analyze key country statistics.")
 
