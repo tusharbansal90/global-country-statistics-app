@@ -21,9 +21,10 @@ country = st.sidebar.selectbox(
 selected = df[df["Country"] == country].iloc[0]
 
 col1, col2, col3 = st.columns(3)
-col1.metric("Population", f"{int(selected['population']):,}")
-col2.metric("GDP per Capita", f"${selected['gdp_per_capita']:,.0f}")
-col3.metric("Literacy Rate", f"{selected['literacy_rate']}%")
+col1.metric("Population", f"{int(selected['Population']):,}")
+col2.metric("GDP per Capita", f"${selected['GDP ($ per capita)']:,.0f}")
+col3.metric("Literacy Rate", f"{selected['Literacy (%)']}%")
+
 
 avg_gdp = df["gdp_per_capita"].mean()
 if selected["gdp_per_capita"] > avg_gdp:
