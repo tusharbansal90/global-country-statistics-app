@@ -33,10 +33,10 @@ if selected["GDP ($ per capita)"] > avg_gdp:
 else:
     st.warning("GDP per capita is below global average.")
 
-top10 = df.sort_values("gdp_per_capita", ascending=False).head(10)
+top10 = df.sort_values("GDP ($ per capita)", ascending=False).head(10)
 
 plt.figure(figsize=(8,4))
-plt.barh(top10["country"], top10["gdp_per_capita"])
+plt.barh(top10["Country"], top10["GDP ($ per capita)"])
 plt.xlabel("GDP per Capita")
 plt.title("Top 10 Countries by GDP per Capita")
 plt.gca().invert_yaxis()
