@@ -15,10 +15,10 @@ st.write("Explore, compare, and analyze key country statistics.")
 
 country = st.sidebar.selectbox(
     "Select a Country",
-    sorted(df["country"].unique())
+    sorted(df["Country"].unique())
 )
 
-selected = df[df["country"] == country].iloc[0]
+selected = df[df["Country"] == country].iloc[0]
 
 col1, col2, col3 = st.columns(3)
 col1.metric("Population", f"{int(selected['population']):,}")
