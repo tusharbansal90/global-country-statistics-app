@@ -1,10 +1,13 @@
+import os
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
 st.set_page_config(page_title="Global Country Statistics Explorer", layout="wide")
 
-df = pd.read_csv("final_country_stats.csv")
+DATA_PATH = os.path.join(os.path.dirname(__file__), "final_country_stats.csv")
+df = pd.read_csv(DATA_PATH)
+
 
 
 st.title("🌍 Global Country Statistics Explorer")
