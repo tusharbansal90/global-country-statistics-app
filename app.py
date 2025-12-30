@@ -26,7 +26,8 @@ col2.metric("GDP per Capita", f"${selected['GDP ($ per capita)']:,.0f}")
 col3.metric("Literacy Rate", f"{selected['Literacy (%)']}%")
 
 
-avg_gdp = df["gdp_per_capita"].mean()
+avg_gdp = df["GDP ($ per capita)"].mean()
+
 if selected["gdp_per_capita"] > avg_gdp:
     st.success("GDP per capita is above global average.")
 else:
