@@ -32,23 +32,22 @@ d1, d2, d3, d4 = st.columns(4)
 
 d1.metric(
     "Population Density",
-    f"{selected['Pop. Density (per sq. mi.)']:.2f}"
-
+    f"{float(selected['Pop. Density (per sq. mi.)']):.2f}"
 )
 
 d2.metric(
     "Birth Rate",
-    f"{selected['Birthrate']:.2f}"
+    f"{float(selected['Birthrate']):.2f}"
 )
 
 d3.metric(
     "Death Rate",
-    f"{selected['Deathrate']:.2f}"
+    f"{float(selected['Deathrate']):.2f}"
 )
 
 d4.metric(
     "Infant Mortality",
-    f"{selected['Infant mortality (per 1000 births)']:.2f}"
+    f"{float(selected['Infant mortality (per 1000 births)']):.2f}"
 )
 
 
