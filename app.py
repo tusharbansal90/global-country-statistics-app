@@ -25,6 +25,32 @@ col1.metric("Population", f"{int(selected['Population']):,}")
 col2.metric("GDP per Capita", f"${selected['GDP ($ per capita)']:,.0f}")
 col3.metric("Literacy Rate", f"{selected['Literacy (%)']}%")
 
+st.markdown("---")
+st.subheader("📊 Demographics")
+
+d1, d2, d3, d4 = st.columns(4)
+
+d1.metric(
+    "Population Density",
+    f"{selected['Pop. Density (per sq. mi.)']:.2f}"
+
+)
+
+d2.metric(
+    "Birth Rate",
+    f"{selected['Birthrate']:.2f}"
+)
+
+d3.metric(
+    "Death Rate",
+    f"{selected['Deathrate']:.2f}"
+)
+
+d4.metric(
+    "Infant Mortality",
+    f"{selected['Infant mortality (per 1000 births)']:.2f}"
+)
+
 
 avg_gdp = df["GDP ($ per capita)"].mean()
 
