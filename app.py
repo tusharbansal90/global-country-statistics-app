@@ -3,122 +3,99 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-st.set_page_config(page_title="Global Country Statistics Explorer", layout="wide")
+# ---------------- CONFIG ----------------
+st.set_page_config(
+    page_title="Global Country Statistics Explorer",
+    layout="wide"
+)
 
+# ---------------- LOAD DATA ----------------
 DATA_PATH = os.path.join(os.path.dirname(__file__), "final_country_stats.csv")
 df = pd.read_csv(DATA_PATH)
 
-def safe_float(value):
+# ---------------- SAFE FLOAT FUNCTION ----------------
+def safe_float(val):
     try:
-        return float(str(value).replace(",", "."))
+        return float(val)
     except:
         return 0.0
 
+# ---------------- TITLE ----------------
 st.title("🌍 Global Country Statistics Explorer")
 st.write("Explore, compare, and analyze key country statistics.")
 
-country = st.sidebar.selectbox(
-    "Select a Country",
-    sorted(df["Country"].unique())
-)
+# ---------------- SIDEBAR ----------------
+st.sidebar.header("🔎 Select Countries")
 
-selected = df[df["Country"] == country].iloc[0]
+country_list = sorted(df["Country"].unique())
 
-col1, col2, col3 = st.columns(3)
+country1 = st.sidebar.selectbox("Country 1", country_list, index=0)
+country2 = st.sidebar.selectbox("Country 2", country_list, index=1)
 
-col1.metric(
-    "Population",
-    f"{int(selected['Population']):,}"
-)
+c1 = df[df["Country"] == country1].iloc[0]
+c2 = df[df["Country"] == country2].iloc[0]
 
-col2.metric(
-    "GDP per Capita",
-    f"${safe_float(selected['GDP ($ per capita)']):,.0f}"
-)
-
-col3.metric(
-    "Literacy Rate",
-    f"{safe_float(selected['Literacy (%)']):.1f}%"
-)
-
+# ---------------- MAIN METRICS ----------------
 st.markdown("---")
-st.subheader("📊 Demographics")
+st.subheader("📊 Key Metrics Comparison")
 
-d1, d2, d3, d4 = st.columns(4)
+col1, col2 = st.columns(2)
 
-d1.metric(
-    "Population Density",
-    f"{safe_float(selected['Pop. Density (per sq. mi.)']):.2f}"
-)
+with col1:
+    st.markdown(f"### {country1}")
+    st.metric("Population", f"{int(c1['Population']):,}")
+    st.metric("GDP per Capita", f"${safe_float(c1['GDP ($ per capita)']):,.0f}")
+    st.metric("Literacy Rate", f"{safe_float(c1['Literacy (%)']):.1f}%")
 
-d2.metric(
-    "Birth Rate",
-    f"{safe_float(selected['Birthrate']):.2f}"
-)
+with col2:
+    st.markdown(f"### {country2}")
+    st.metric("Population", f"{int(c2['Population']):,}")
+    st.metric("GDP per Capita", f"${safe_float(c2['GDP ($ per capita)']):,.0f}")
+    st.metric("Literacy Rate", f"{safe_float(c2['Literacy (%)']):.1f}%")
 
-d3.metric(
-    "Death Rate",
-    f"{safe_float(selected['Deathrate']):.2f}"
-)
-
-
-d4.metric(
-    "Infant Mortality",
-    f"{safe_float(selected['Infant mortality (per 1000 births)']):.2f}"
-)
-
-
+# ---------------- DEMOGRAPHICS ----------------
 st.markdown("---")
+st.subheader("📈 Demographics")
 
+d1, d2 = st.columns(2)
+
+with d1:
+    st.markdown(f"#### {country1}")
+    st.metric("Population Density", f"{safe_float(c1['Pop. Density (per sq. mi.)']):.2f}")
+    st.metric("Birth Rate", f"{safe_float(c1['Birthrate']):.2f}")
+    st.metric("Death Rate", f"{safe_float(c1['Deathrate']):.2f}")
+    st.metric("Infant Mortality", f"{safe_float(c1['Infant mortality (per 1000 births)']):.2f}")
+
+with d2:
+    st.markdown(f"#### {country2}")
+    st.metric("Population Density", f"{safe_float(c2['Pop. Density (per sq. mi.)']):.2f}")
+    st.metric("Birth Rate", f"{safe_float(c2['Birthrate']):.2f}")
+    st.metric("Death Rate", f"{safe_float(c2['Deathrate']):.2f}")
+    st.metric("Infant Mortality", f"{safe_float(c2['Infant mortality (per 1000 births)']):.2f}")
+
+# ---------------- GDP INSIGHT ----------------
 st.markdown("---")
-st.subheader("🌍 Global Rankings")
-
-# Total countries
-total_countries = len(df)
-
-# Rankings
-gdp_rank = df["GDP ($ per capita)"].rank(ascending=False)
-literacy_rank = df["Literacy (%)"].rank(ascending=False)
-infant_rank = df["Infant mortality (per 1000 births)"].rank(ascending=True)
-
-r1, r2, r3 = st.columns(3)
-
-r1.metric(
-    "GDP Rank",
-    f"{int(gdp_rank[df['Country'] == country].values[0])} / {total_countries}"
-)
-
-r2.metric(
-    "Literacy Rank",
-    f"{int(literacy_rank[df['Country'] == country].values[0])} / {total_countries}"
-)
-
-r3.metric(
-    "Infant Mortality Rank",
-    f"{int(infant_rank[df['Country'] == country].values[0])} / {total_countries}"
-)
-
-
 avg_gdp = df["GDP ($ per capita)"].apply(safe_float).mean()
 
-if safe_float(selected["GDP ($ per capita)"]) > avg_gdp:
-    st.success("GDP per capita is above global average.")
+if safe_float(c1["GDP ($ per capita)"]) > avg_gdp:
+    st.success(f"{country1} has GDP per capita above global average.")
 else:
-    st.warning("GDP per capita is below global average.")
+    st.warning(f"{country1} has GDP per capita below global average.")
 
 # ---------------- TOP 10 GDP CHART ----------------
+st.markdown("---")
 st.subheader("💰 Top 10 Countries by GDP per Capita")
 
 top10 = (
     df.assign(gdp=df["GDP ($ per capita)"].apply(safe_float))
-      .sort_values("gdp", ascending=False)
-      .head(10)
+    .sort_values("gdp", ascending=False)
+    .head(10)
 )
 
-plt.figure(figsize=(8, 4))
-plt.barh(top10["Country"], top10["gdp"])
-plt.xlabel("GDP per Capita (USD)")
-plt.title("Top 10 Countries by GDP per Capita")
-plt.gca().invert_yaxis()
+fig, ax = plt.subplots(figsize=(8, 4))
+ax.barh(top10["Country"], top10["gdp"])
+ax.set_xlabel("GDP per Capita")
+ax.set_title("Top 10 Countries by GDP per Capita")
+ax.invert_yaxis()
 
-st.pyplot(plt)
+st.pyplot(fig)
