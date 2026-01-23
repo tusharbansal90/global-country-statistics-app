@@ -99,3 +99,31 @@ ax.set_title("Top 10 Countries by GDP per Capita")
 ax.invert_yaxis()
 
 st.pyplot(fig)
+
+# ==================== WORLD MAP ====================
+import plotly.express as px
+
+st.markdown("---")
+st.subheader("🌍 Global Map View")
+
+map_df = df.copy()
+
+map_df["GDP ($ per capita)"] = map_df["GDP ($ per capita)"].apply(safe_float)
+map_df["Literacy (%)"] = map_df["Literacy (%)"].apply(safe_float)
+
+metric = st.selectbox(
+    "Select metric to visualize on map",
+    ["GDP ($ per capita)", "Literacy (%)"]
+)
+
+fig_map = px.choropleth(
+    map_df,
+    locations="Country",
+    locationmode="country names",
+    color=metric,
+    hover_name="Country",
+    color_continuous_scale="Viridis",
+    title=f"World Map by {metric}"
+)
+
+st.plotly_chart(fig_map, use_container_width=True)
