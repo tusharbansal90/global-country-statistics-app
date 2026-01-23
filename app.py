@@ -25,17 +25,18 @@ country = st.sidebar.selectbox(
 selected = df[df["Country"] == country].iloc[0]
 
 col1, col2, col3 = st.columns(3)
-c1.metric(
+
+col1.metric(
     "Population",
     f"{int(selected['Population']):,}"
 )
 
-c2.metric(
+col2.metric(
     "GDP per Capita",
     f"${safe_float(selected['GDP ($ per capita)']):,.0f}"
 )
 
-c3.metric(
+col3.metric(
     "Literacy Rate",
     f"{safe_float(selected['Literacy (%)']):.1f}%"
 )
