@@ -70,6 +70,35 @@ d4.metric(
 
 st.markdown("---")
 
+st.markdown("---")
+st.subheader("🌍 Global Rankings")
+
+# Total countries
+total_countries = len(df)
+
+# Rankings
+gdp_rank = df["GDP ($ per capita)"].rank(ascending=False)
+literacy_rank = df["Literacy (%)"].rank(ascending=False)
+infant_rank = df["Infant mortality (per 1000 births)"].rank(ascending=True)
+
+r1, r2, r3 = st.columns(3)
+
+r1.metric(
+    "GDP Rank",
+    f"{int(gdp_rank[df['Country'] == country].values[0])} / {total_countries}"
+)
+
+r2.metric(
+    "Literacy Rank",
+    f"{int(literacy_rank[df['Country'] == country].values[0])} / {total_countries}"
+)
+
+r3.metric(
+    "Infant Mortality Rank",
+    f"{int(infant_rank[df['Country'] == country].values[0])} / {total_countries}"
+)
+
+
 avg_gdp = df["GDP ($ per capita)"].apply(safe_float).mean()
 
 if safe_float(selected["GDP ($ per capita)"]) > avg_gdp:
