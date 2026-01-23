@@ -24,6 +24,15 @@ def safe_float(val):
 st.title("🌍 Global Country Statistics Explorer")
 st.write("Explore, compare, and analyze key country statistics.")
 
+# -------------------- COUNTRY SELECTOR --------------------
+country = st.sidebar.selectbox(
+    "Select a Country",
+    sorted(df["Country"].unique())
+)
+
+selected = df[df["Country"] == country].iloc[0]
+
+
 # ---------------- SIDEBAR ----------------
 st.sidebar.header("🔎 Select Countries")
 
